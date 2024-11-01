@@ -66,11 +66,9 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token)
                 .getBody();
 
-        System.out.println(claims);
-
         return TokenUserInfo.builder()
                 .email(claims.getSubject())
-                // 클레임이 get할 수 잇는 타입이 정해져 있기 때문에 Role을 꺼내지 못함
+                // 클레임이 get할 수 있는 타입이 정해져 있기 때문에 Role을 꺼내지 못함
                 .role(Role.valueOf(claims.get("role", String.class)))
                 .build();
     }

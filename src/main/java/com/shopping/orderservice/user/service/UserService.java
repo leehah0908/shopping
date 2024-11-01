@@ -9,10 +9,18 @@ import com.shopping.orderservice.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -57,5 +65,17 @@ public class UserService {
         );
 
         return user.toUserResDto();
+    }
+
+    public List<UserResDto> userList() {
+        // 페이징 처리 -> 1 페이지 요청, 한 화면에 보여줄 회원 수 : 6명
+        Pageable page = PageRequest.of(0, 6);
+        Page<User> pageList = userRepository.findAll(page);
+        List<User> userList = pageList.getContent();
+
+        // UserResDto 리스트로 리턴
+        return userList.stream()
+                .map(User::toUserResDto)
+                .collect(Collectors.toList());
     }
 }

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -13,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity // 권한 검사를 컨트롤러의 메서드에서 전역적으로 수행하기 위한 설정
 @RequiredArgsConstructor
 @Slf4j
 public class SecurityConfig {
@@ -29,6 +31,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(auth -> {
             auth
+//                    .requestMatchers("/user/list").hasAnyRole("ADMIN")
                     .requestMatchers("/user/signup", "/user/login").permitAll()
                     .anyRequest().authenticated();
 

@@ -9,9 +9,11 @@ import com.shopping.orderservice.user.dto.response.UserResDto;
 import com.shopping.orderservice.user.entity.User;
 import com.shopping.orderservice.user.service.UserService;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.SecureRandom;
@@ -57,7 +59,14 @@ public class UserController {
         return new ResponseEntity<>(resDto, HttpStatus.OK);
     }
 
-    // 일반 회원의 로그인 요청
+    // 관리자 회원 정보 요청
+    @GetMapping("/list")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> userlist() {
+        userService.userList();
+    }
+
+    // 일반 회원의 회원 정보 요청
     @GetMapping("/myinfo")
     public ResponseEntity<?> getMyInfo() {
 

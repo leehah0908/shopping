@@ -58,7 +58,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                         authorityList // 권한 범위
                 );
 
-                // spring security 컨테이너에 인증 덩보 갹체 등록
+                // spring security 컨테이너에 인증 정보 객체 등록
                 SecurityContextHolder.getContext().setAuthentication(auth);
 
             }
