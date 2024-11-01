@@ -1,12 +1,15 @@
 package com.shopping.orderservice.user.service;
 
+import com.shopping.orderservice.common.auth.TokenUserInfo;
 import com.shopping.orderservice.user.dto.request.UserLoginReqDto;
 import com.shopping.orderservice.user.dto.request.UserSignupReqDto;
+import com.shopping.orderservice.user.dto.response.UserResDto;
 import com.shopping.orderservice.user.entity.User;
 import com.shopping.orderservice.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,5 +43,19 @@ public class UserService {
         }
         return loginUser;
 
+    }
+
+    public UserResDto myInfo() {
+        TokenUserInfo userInfo =
+                // 필터에서 세팅한 토큰 정보를 불러오는 메서드
+                (TokenUserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        System.out.println(userInfo);
+
+        User user = userRepository.findByEmail(userInfo.getEmail()).orElseThrow(
+                () -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다.")
+        );
+
+        return user.toUserResDto();
     }
 }

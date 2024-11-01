@@ -1,6 +1,7 @@
 package com.shopping.orderservice.user.entity;
 
 import com.shopping.orderservice.common.entity.Address;
+import com.shopping.orderservice.user.dto.response.UserResDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,5 +37,14 @@ public class User {
     @Builder.Default // build시 초기화된 값으로 세팅하기 위한 아노테이션
     private Role role = Role.USER;
 
+    public UserResDto toUserResDto() {
+        return UserResDto.builder()
+                .userId(userId)
+                .email(email)
+                .nickname(nickname)
+                .address(address)
+                .role(role)
+                .build();
+    }
 
 }
