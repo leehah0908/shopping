@@ -1,7 +1,8 @@
 package com.shopping.orderservice.user.controller;
 
+import com.shopping.orderservice.common.auth.JwtTokenProvider;
 import com.shopping.orderservice.common.dto.CommonResDto;
-import com.shopping.orderservice.user.dto.UserLoginReqDto;
+import com.shopping.orderservice.user.dto.request.UserLoginReqDto;
 import com.shopping.orderservice.user.dto.request.UserSignupReqDto;
 import com.shopping.orderservice.user.entity.User;
 import com.shopping.orderservice.user.service.UserService;
@@ -18,6 +19,8 @@ public class UserController {
 
     private final UserService userService;
 
+    private final JwtTokenProvider jwtTokenProvider;
+
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody UserSignupReqDto dto) {
 
@@ -30,6 +33,11 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserLoginReqDto dto) {
         User loginUser = userService.login(dto);
+
+        // 회원정보 일치 -> 로그인 유지를 위해 JWT 생성 후 클라이언트에게 발급
+        String token = jwtTokenProvider.createToken(loginUser.getEmail(), loginUser.getRole().toString());
+
+        System.out.println(token);
 
         return null;
     }

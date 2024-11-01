@@ -1,4 +1,4 @@
-package com.shopping.orderservice.user.dto;
+package com.shopping.orderservice.user.dto.request;
 
 import lombok.*;
 

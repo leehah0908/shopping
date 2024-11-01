@@ -15,19 +15,15 @@ public class Product extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id")
     private Long productId;
 
-    @Column(name = "product_name")
     private String productName;
 
     private String category;
 
     private Integer price;
 
-    @Column(name = "stock_quantity")
     private Integer stockQuantity;
 
-    @Column(name = "image_path")
     private String imagePath;
 }

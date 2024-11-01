@@ -1,6 +1,6 @@
 package com.shopping.orderservice.user.service;
 
-import com.shopping.orderservice.user.dto.UserLoginReqDto;
+import com.shopping.orderservice.user.dto.request.UserLoginReqDto;
 import com.shopping.orderservice.user.dto.request.UserSignupReqDto;
 import com.shopping.orderservice.user.entity.User;
 import com.shopping.orderservice.user.repository.UserRepository;
