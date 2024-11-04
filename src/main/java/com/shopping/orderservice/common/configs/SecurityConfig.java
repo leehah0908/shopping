@@ -32,7 +32,10 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> {
             auth
 //                    .requestMatchers("/user/list").hasAnyRole("ADMIN")
-                    .requestMatchers("/user/signup", "/user/login").permitAll()
+                    .requestMatchers(
+                            "/user/signup",
+                            "/user/login",
+                            "product/list").permitAll()
                     .anyRequest().authenticated();
 
             // 필터 등록 (requestMatchers에 지정된 요청 이외의 모든 요청은 jwtAuthFilter를 통과해야 함)
