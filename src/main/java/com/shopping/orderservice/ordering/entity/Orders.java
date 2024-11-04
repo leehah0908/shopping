@@ -3,10 +3,7 @@ package com.shopping.orderservice.ordering.entity;
 import com.shopping.orderservice.ordering.dto.response.ResOrderListDto;
 import com.shopping.orderservice.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +27,7 @@ public class Orders {
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
+    @Setter
     private OrderStatus orderStatus = OrderStatus.ORDERED;
 
     @OneToMany(mappedBy = "orders", cascade = CascadeType.PERSIST, orphanRemoval = true)

@@ -56,4 +56,16 @@ public class OrderController {
 
         return new ResponseEntity<>(resDto, HttpStatus.OK);
     }
+
+    // 주문상태 변경
+    @PatchMapping("/{orderId}/cancel")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> orderCancel(@PathVariable long orderId){
+
+        Orders orders = orderService.orderCancel(orderId);
+
+        CommonResDto resDto = new CommonResDto(HttpStatus.OK, "주문이 취소되었습니다.", orders.getOrderId());
+
+        return new ResponseEntity<>(resDto, HttpStatus.OK);
+    }
 }

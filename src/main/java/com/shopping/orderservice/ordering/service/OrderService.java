@@ -4,6 +4,7 @@ import com.shopping.orderservice.common.auth.TokenUserInfo;
 import com.shopping.orderservice.ordering.dto.request.ReqOrderSaveDto;
 import com.shopping.orderservice.ordering.dto.response.ResOrderListDto;
 import com.shopping.orderservice.ordering.entity.OrderDetail;
+import com.shopping.orderservice.ordering.entity.OrderStatus;
 import com.shopping.orderservice.ordering.entity.Orders;
 import com.shopping.orderservice.ordering.repository.OrderRepository;
 import com.shopping.orderservice.product.entity.Product;
@@ -122,5 +123,16 @@ public class OrderService {
         return orders.stream()
                 .map(Orders::toResOrderListDto)
                 .toList();
+    }
+
+
+    public Orders orderCancel(long orderId) {
+
+        Orders orders = orderRepository.findById(orderId).orElseThrow(
+                () -> new EntityNotFoundException("주문 정보를 찾을 수 없습니다."));
+
+        orders.setOrderStatus(OrderStatus.CANCELED);
+
+        return orders;
     }
 }
