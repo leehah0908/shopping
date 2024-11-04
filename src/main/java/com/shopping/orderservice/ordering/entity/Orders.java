@@ -1,5 +1,6 @@
 package com.shopping.orderservice.ordering.entity;
 
+import com.shopping.orderservice.ordering.dto.response.ResOrderListDto;
 import com.shopping.orderservice.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -32,4 +34,21 @@ public class Orders {
 
     @OneToMany(mappedBy = "orders", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<OrderDetail> orderDetails;
+
+    public ResOrderListDto toResOrderListDto() {
+        List<OrderDetail> orderDetails = this.getOrderDetails();
+        List<ResOrderListDto.OrderDetailDto> orderDetailDtos = new ArrayList<>();
+
+        // orderDetail -> orderDetailDtos
+        for (OrderDetail orderDetail : orderDetails) {
+            orderDetailDtos.add(orderDetail.toOrderDetailDto());
+        }
+
+        return ResOrderListDto.builder()
+                .orderId(orderId)
+                .userEmail(user.getEmail())
+                .orderStatus(orderStatus)
+                .orderDetail(orderDetailDtos)
+                .build();
+    }
 }

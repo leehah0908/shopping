@@ -2,8 +2,9 @@ package com.shopping.orderservice.ordering.service;
 
 import com.shopping.orderservice.common.auth.TokenUserInfo;
 import com.shopping.orderservice.ordering.dto.request.ReqOrderSaveDto;
-import com.shopping.orderservice.ordering.entity.Orders;
+import com.shopping.orderservice.ordering.dto.response.ResOrderListDto;
 import com.shopping.orderservice.ordering.entity.OrderDetail;
+import com.shopping.orderservice.ordering.entity.Orders;
 import com.shopping.orderservice.ordering.repository.OrderRepository;
 import com.shopping.orderservice.product.entity.Product;
 import com.shopping.orderservice.product.repository.ProductRepository;
@@ -69,5 +70,57 @@ public class OrderService {
 
         // order를 세이브하면 내부에 있는 detail 리스트도 함께 insert됨
         return orderRepository.save(orders);
+    }
+
+    public List<ResOrderListDto> myOrder(TokenUserInfo userInfo) {
+
+        User user = userRepository.findByEmail(userInfo.getEmail()).orElseThrow(
+                () -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
+
+        List<Orders> orders = orderRepository.findByUser(user).orElseThrow(
+                () -> new EntityNotFoundException("주문 점보가 없습니다.")
+        );
+
+
+        List<ResOrderListDto> result = orders.stream()
+                .map(Orders::toResOrderListDto)
+                .toList();
+
+        return result;
+
+        /*
+         OrderingListResDto -> orderDetailDto (static 내부 클래스)
+         {
+            id: 주문번호,
+            userEmail: 주문한 사람 이메일,
+            orderStatus: 주문 상태
+            orderDetails: [
+                {
+                    id: 주문상세번호,
+                    productName: 상품명,
+                    count: 수량
+                },
+                {
+                    id: 주문상세번호,
+                    productName: 상품명,
+                    count: 수량
+                },
+                {
+                    id: 주문상세번호,
+                    productName: 상품명,
+                    count: 수량
+                }
+                ...
+            ]
+         }
+         */
+    }
+
+    public List<ResOrderListDto> allList() {
+        List<Orders> orders = orderRepository.findAll();
+
+        return orders.stream()
+                .map(Orders::toResOrderListDto)
+                .toList();
     }
 }

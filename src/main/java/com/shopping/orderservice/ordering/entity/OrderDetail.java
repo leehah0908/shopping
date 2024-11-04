@@ -1,5 +1,6 @@
 package com.shopping.orderservice.ordering.entity;
 
+import com.shopping.orderservice.ordering.dto.response.ResOrderListDto;
 import com.shopping.orderservice.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,4 +29,12 @@ public class OrderDetail {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Orders orders;
+
+    public ResOrderListDto.OrderDetailDto toOrderDetailDto() {
+        return ResOrderListDto.OrderDetailDto.builder()
+                .detailId(detailId)
+                .productName(product.getProductName())
+                .quantity(quantity)
+                .build();
+    }
 }
