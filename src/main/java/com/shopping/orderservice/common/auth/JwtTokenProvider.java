@@ -61,8 +61,11 @@ public class JwtTokenProvider {
          */
 
         Claims claims = Jwts.parserBuilder()
+                // 토큰 발급자의 발급 당시 서명을 넣어줌
                 .setSigningKey(secretKey)
                 .build()
+                // 서명 위조 검사: 위조된 경우에는 예외 발생
+                // 위조되지 않았다면 payload 리턴
                 .parseClaimsJws(token)
                 .getBody();
 
