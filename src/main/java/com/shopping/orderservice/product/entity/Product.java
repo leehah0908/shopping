@@ -27,6 +27,7 @@ public class Product extends BaseTimeEntity {
 
     private int price;
 
+    @Setter
     private int stockQuantity;
 
     @NotEmpty

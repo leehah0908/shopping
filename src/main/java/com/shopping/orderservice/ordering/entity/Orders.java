@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 
 @Entity
-public class Order {
+public class Orders {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +30,6 @@ public class Order {
     @Builder.Default
     private OrderStatus orderStatus = OrderStatus.ORDERED;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<OrderDetail> orderDetails;
 }
