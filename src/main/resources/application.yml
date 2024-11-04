@@ -18,3 +18,6 @@ server:
 jwt:
   expiration: 30
   secretKey: ${JWT_KEY}
+
+  expirationRt: 14400
+  secretKeyRt: ${JWT_RFKEY}

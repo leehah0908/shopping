@@ -41,12 +41,16 @@ public class UserController {
     public ResponseEntity<?> login(@RequestBody UserLoginReqDto dto) {
         User loginUser = userService.login(dto);
 
-        // 회원정보 일치 -> 로그인 유지를 위해 JWT 생성 후 클라이언트에게 발급
-        String token = jwtTokenProvider.createToken(loginUser.getEmail(), loginUser.getRole().toString());
+        // 회원정보 일치 -> 로그인 유지를 위해 JWT 생성 후 클라이언트에게 발급 (access_token)
+        String accessToken = jwtTokenProvider.createToken(loginUser.getEmail(), loginUser.getRole().toString());
+
+        // access_token이 만료되었을 경우 refresh_token이 유효한지 확인하고, 유효하다면 access_token 재발급
+        // redis에 저장
+        String refreshToken = jwtTokenProvider.createRefreshToken(loginUser.getEmail(), loginUser.getRole().toString());
 
         // 토큰 외에 추가로 전달할 정보가 있다면 Map을 사용
         Map<String, Object> map = new HashMap<>();
-        map.put("token", token);
+        map.put("token", accessToken);
         map.put("user_id", loginUser.getUserId());
 
         CommonResDto resDto = new CommonResDto(HttpStatus.OK, "로그인 성공", map);
