@@ -27,9 +27,7 @@ public class ProductController {
     // 요청에 이미지가 함께 들어옴 -> 이미지를 처리하는 방식이 두가지가 있음
     // 1. js의 FormData 객체를 통해서 모든 데이터를 전달 (multipart/form-data 형식으로 전달)
     // 2. JSON 형태로 전달 (이미지를 Base64 인코딩을 통해 문자열로 변환해서 전달)
-    // @ModelAttribute -> FormData 객체를 form 태그 방식으로 받기 위해 사용
-    // Model 사용X (react는 Model을 받을 수 없음) -> 데이터를 받기 위해서만 사용
-    public ResponseEntity<?> create(@Valid @ModelAttribute ReqProductSaveDto dto) {
+    public ResponseEntity<?> create(@Valid ReqProductSaveDto dto) {
 
         Product product = productService.create(dto);
 

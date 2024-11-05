@@ -77,4 +77,10 @@ public class UserService {
                 .map(User::toUserResDto)
                 .collect(Collectors.toList());
     }
+
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다.")
+        );
+    }
 }

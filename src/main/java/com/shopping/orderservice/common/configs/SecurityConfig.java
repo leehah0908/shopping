@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,22 +25,27 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.csrf(csrfConfig -> csrfConfig.disable());
+        http.csrf(csrfConfig -> csrfConfig.disable())
+                .cors(Customizer.withDefaults()) // 직접 커스텀한 CORS 설정을 적용
 
-        // 더 이상 세션으로 관리 상태를 유지하지 않겠다.
-        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                // 더 이상 세션으로 관리 상태를 유지하지 않겠다.
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-        http.authorizeHttpRequests(auth -> {
-            auth
-//                    .requestMatchers("/user/list").hasAnyRole("ADMIN")
-                    .requestMatchers(
-                            "/user/signup",
-                            "/user/login",
-                            "product/list").permitAll()
-                    .anyRequest().authenticated();
+                .authorizeHttpRequests(auth -> {
+                    auth
+                            //                    .requestMatchers("/user/list").hasAnyRole("ADMIN")
+                            .requestMatchers(
+                                    "/user/signup",
+                                    "/user/login",
+                                    "/user/refresh",
+                                    "product/list"
+                            )
+                            .permitAll()
+                            .anyRequest().authenticated();
 
-            // 필터 등록 (requestMatchers에 지정된 요청 이외의 모든 요청은 jwtAuthFilter를 통과해야 함)
-        }).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                    // 필터 등록 (requestMatchers에 지정된 요청 이외의 모든 요청은 jwtAuthFilter를 통과해야 함)
+                })
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
