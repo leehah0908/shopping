@@ -2,6 +2,7 @@ package com.shopping.orderservice.product.controller;
 
 import com.shopping.orderservice.common.dto.CommonResDto;
 import com.shopping.orderservice.product.dto.request.ReqProductSaveDto;
+import com.shopping.orderservice.product.dto.request.ReqProductSearchDto;
 import com.shopping.orderservice.product.dto.response.ResProductDto;
 import com.shopping.orderservice.product.entity.Product;
 import com.shopping.orderservice.product.service.ProductService;
@@ -39,9 +40,11 @@ public class ProductController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<?> list(Pageable pageable) {
+    public ResponseEntity<?> list(ReqProductSearchDto dto,
+                                  Pageable pageable) {
+        System.out.println(dto);
 
-        Page<ResProductDto> products = productService.productList(pageable);
+        Page<ResProductDto> products = productService.productList(dto, pageable);
 
         CommonResDto resDto = new CommonResDto(HttpStatus.OK, "상품 정보 조회 완료", products);
 
