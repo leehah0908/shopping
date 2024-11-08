@@ -25,8 +25,8 @@ server:
   port: 8181
 
 jwt:
-  expiration: 1
+  expiration: 30
   secretKey: ${JWT_KEY}
 
-  expirationRt: 2
+  expirationRt: 14400
   secretKeyRt: ${JWT_RFKEY}

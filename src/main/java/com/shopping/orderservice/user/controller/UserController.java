@@ -54,7 +54,7 @@ public class UserController {
         // access_token이 만료되었을 경우 refresh_token이 유효한지 확인하고, 유효하다면 access_token 재발급
         // redis에 저장
         String refreshToken = jwtTokenProvider.createRefreshToken(loginUser.getEmail(), loginUser.getRole().toString());
-        redisTemplate.opsForValue().set(loginUser.getEmail(), refreshToken, 2, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(loginUser.getEmail(), refreshToken, 240, TimeUnit.HOURS);
 
         // 토큰 외에 추가로 전달할 정보가 있다면 Map을 사용
         Map<String, Object> map = new HashMap<>();
