@@ -39,6 +39,7 @@ public class RedisConfig {
         return new LettuceConnectionFactory(configuration);
     }
 
+
     @Bean
     @Qualifier("refresh-template")
     public RedisTemplate<String, Object> redisTemplate(@Qualifier("refresh-token-db") RedisConnectionFactory factory) {

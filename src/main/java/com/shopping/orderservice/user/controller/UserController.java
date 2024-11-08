@@ -103,7 +103,7 @@ public class UserController {
         // refresh token 만료
         if (obj == null) {
             return new ResponseEntity<>(
-                    new CommonErrorDto(HttpStatus.UNAUTHORIZED, "다시 로그인이 필요합니다."),
+                    new CommonErrorDto(HttpStatus.UNAUTHORIZED, "EXPIRED_RT"),
                     HttpStatus.UNAUTHORIZED
             );
         }

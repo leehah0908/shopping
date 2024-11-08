@@ -75,7 +75,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         } catch (Exception e) {
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                response.setContentType("application/json");
+                response.setContentType("application/json; charset=utf-8");
                 response.getWriter().write("토큰에 문제가 있음");
         }
     }

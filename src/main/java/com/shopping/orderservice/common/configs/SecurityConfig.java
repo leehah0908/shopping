@@ -1,6 +1,7 @@
 package com.shopping.orderservice.common.configs;
 
 import com.shopping.orderservice.common.auth.JwtAuthFilter;
+import com.shopping.orderservice.common.dto.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -43,9 +45,13 @@ public class SecurityConfig {
                             .permitAll()
                             .anyRequest().authenticated();
 
-                    // 필터 등록 (requestMatchers에 지정된 요청 이외의 모든 요청은 jwtAuthFilter를 통과해야 함)
                 })
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                // 필터 등록 (requestMatchers에 지정된 요청 이외의 모든 요청은 jwtAuthFilter를 통과해야 함)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exception -> {
+                    // 인증 과정에서 예외가 발생한 경우 그 예외를 핸들링 할 객체를 등록 (ex. 로그인 안한 유저가 myPage 요청)
+                    exception.authenticationEntryPoint(customAuthenticationEntryPoint);
+                });
 
         return http.build();
     }
