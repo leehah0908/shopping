@@ -14,9 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,12 +46,13 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public List<ResProductDto> productList(Pageable pageable) {
+    public Page<ResProductDto> productList(Pageable pageable) {
+        System.out.println(pageable);
         Page<Product> products = productRepository.findAll(pageable);
-        List<Product> content = products.getContent();
 
-        return content.stream()
-                .map(Product::toProductDto)
-                .collect(Collectors.toList());
+        // 클라이언트에 페이징에 필요한 데이터를 제공하기 위해 Page 객체를 넘겨야 함
+        // Page 안에 Entity가 들어있기 때문에 dto로 변환해서 넘겨야 함 (page 객체는 유지)
+        // map을 통해 product를 dto로 변환해서 리턴
+        return products.map(Product::toProductDto);
     }
 }

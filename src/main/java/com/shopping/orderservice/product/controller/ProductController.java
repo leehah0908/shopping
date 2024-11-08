@@ -7,13 +7,15 @@ import com.shopping.orderservice.product.entity.Product;
 import com.shopping.orderservice.product.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/product")
@@ -39,7 +41,7 @@ public class ProductController {
     @GetMapping("/list")
     public ResponseEntity<?> list(Pageable pageable) {
 
-        List<ResProductDto> products = productService.productList(pageable);
+        Page<ResProductDto> products = productService.productList(pageable);
 
         CommonResDto resDto = new CommonResDto(HttpStatus.OK, "상품 정보 조회 완료", products);
 

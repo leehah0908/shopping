@@ -70,7 +70,7 @@ public class UserController {
     @GetMapping("/list")
     @PreAuthorize("hasRole('ADMIN')")
     // controller 파리미터로 pageable을 받으면, 페이징 파라미터 처리를 쉽게 처리할 수 있음
-    // 클라이언트에서는 /list?number=1&size=10&sort=name,desc -> 형태로 데이터 보내기
+    // 클라이언트에서는 /list?page=1&size=10&sort=name,desc -> 형태로 데이터 보내기
     // 요청시 쿼리스트링이 전돨되지 않으면 기본값 0, 20, unsorted로 설정
     public ResponseEntity<?> userList(Pageable pageable) {
 
