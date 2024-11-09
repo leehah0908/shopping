@@ -1,6 +1,7 @@
 package com.shopping.orderservice.ordering.service;
 
 import com.shopping.orderservice.common.auth.TokenUserInfo;
+import com.shopping.orderservice.ordering.controller.SseController;
 import com.shopping.orderservice.ordering.dto.request.ReqOrderSaveDto;
 import com.shopping.orderservice.ordering.dto.response.ResOrderListDto;
 import com.shopping.orderservice.ordering.entity.OrderDetail;
@@ -29,6 +30,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
+    private final SseController sseController;
 
     public Orders orderSave(TokenUserInfo userInfo, List<ReqOrderSaveDto> dtoList) {
 
@@ -70,7 +72,12 @@ public class OrderService {
         }
 
         // order를 세이브하면 내부에 있는 detail 리스트도 함께 insert됨
-        return orderRepository.save(orders);
+        Orders saveOrders = orderRepository.save(orders);
+
+        // 관리자에게 주문이 들어왔다고 알림 전송
+        sseController.sendOrderMessage(saveOrders);
+
+        return saveOrders;
     }
 
     public List<ResOrderListDto> myOrder(TokenUserInfo userInfo) {
